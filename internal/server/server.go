@@ -1,15 +1,16 @@
 package server
 
 import (
+	"cma/internal/database"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
-
-	"cma/internal/database"
+	sloggin "github.com/samber/slog-gin"
 )
 
 type Server struct {
@@ -18,7 +19,7 @@ type Server struct {
 	db database.Service
 }
 
-func NewServer() *http.Server {
+func NewServer(logger *slog.Logger, logConfig sloggin.Config) *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
 		port: port,
@@ -29,7 +30,7 @@ func NewServer() *http.Server {
 	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(),
+		Handler:      NewServer.RegisterRoutes(logger, logConfig),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
