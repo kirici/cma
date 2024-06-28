@@ -14,7 +14,7 @@ func (s *Server) RegisterRoutes(logger *slog.Logger, logConfig sloggin.Config) h
 	r.Use(gin.Recovery())
 
 	r.GET("/", s.HelloWorldHandler)
-	r.GET("/health", s.healthHandler)
+	r.GET("/healthz", s.healthHandler)
 
 	return r
 }
