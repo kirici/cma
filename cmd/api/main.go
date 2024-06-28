@@ -20,6 +20,7 @@ func main() {
 	if err != nil {
 		logger.Error("could not open log file, logging to stdout only", "err", err)
 	}
+	defer f.Close()
 	logConfig := sloggin.Config{
 		WithUserAgent:      false,
 		WithRequestID:      true,
