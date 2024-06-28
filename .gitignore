@@ -1,0 +1,24 @@
+# Test binary, built with "go test -c"
+*.test
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+# go.work
+
+# IDE specific files
+# .vscode
+
+# .env file
+.env
+
+# Project build
+main
+# *templ.go
+
+# sqlite db
+*.db
+
+# Generic
+tmp/
