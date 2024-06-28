@@ -4,6 +4,8 @@ Container Management API
 
 ## MakeFile
 
+Rename the `.env.example` file to `.env` and edit the values as desired.
+
 Run all make commands with clean tests
 ```bash
 make all build
