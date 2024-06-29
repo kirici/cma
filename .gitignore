@@ -19,6 +19,3 @@ main
 
 # sqlite db
 *.db
-
-# Generic
-tmp/
