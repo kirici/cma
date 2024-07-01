@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"log/slog"
 	"os"
 	"strconv"
 	"time"
@@ -22,6 +23,8 @@ type Service interface {
 	// Close terminates the database connection.
 	// It returns an error if the connection cannot be closed.
 	Close() error
+
+	AddOrder(Order) sql.Result
 }
 
 type service struct {
@@ -110,4 +113,33 @@ func (s *service) Health() map[string]string {
 func (s *service) Close() error {
 	log.Printf("Disconnected from database: %s", dburl)
 	return s.db.Close()
+}
+
+// CREATE TABLE "orders" (
+// 	"id"	INTEGER,
+// 	"first_name"	TEXT,
+// 	"last_name"	TEXT,
+// 	"email"	TEXT,
+// 	"ip_address"	TEXT,
+// 	PRIMARY KEY("id" AUTOINCREMENT)
+// )
+
+type Order struct {
+	first_name string
+	last_name  string
+	email      string
+	ip_address string
+	Id         int
+}
+
+func (s *service) AddOrder(newOrder Order) sql.Result {
+	stmt, _ := s.db.Prepare("INSERT INTO orders (id, first_name, last_name, email, ip_address) VALUES (?, ?, ?, ?, ?)")
+	res, err := stmt.Exec(nil, newOrder.first_name, newOrder.last_name, newOrder.email, newOrder.ip_address)
+	defer stmt.Close()
+	if err != nil {
+		slog.Error("could not execute statement: %s", "err", err)
+	}
+	fmt.Printf("Added %v %v at %d\n", newOrder.first_name, newOrder.last_name, newOrder.Id)
+	fmt.Printf("Result: %s", res)
+	return res
 }

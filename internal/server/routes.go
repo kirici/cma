@@ -1,8 +1,10 @@
 package server
 
 import (
+	"cma/internal/database"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
@@ -15,6 +17,7 @@ func (s *Server) RegisterRoutes(logger *slog.Logger, logConfig sloggin.Config) h
 
 	r.GET("/", s.HelloWorldHandler)
 	r.GET("/healthz", s.healthHandler)
+	r.GET("/order/:id", s.orderHandler)
 
 	return r
 }
@@ -28,4 +31,12 @@ func (s *Server) HelloWorldHandler(c *gin.Context) {
 
 func (s *Server) healthHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, s.db.Health())
+}
+
+func (s *Server) orderHandler(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	order := database.Order{
+		Id: id,
+	}
+	c.JSON(http.StatusOK, s.db.AddOrder(order))
 }
