@@ -25,7 +25,7 @@ type Service interface {
 	// It returns an error if the connection cannot be closed.
 	Close() error
 
-	AddOrder(model.Order) sql.Result
+	AddOrder(model.Order) int
 }
 
 type service struct {
@@ -116,7 +116,7 @@ func (s *service) Close() error {
 	return s.db.Close()
 }
 
-func (s *service) AddOrder(newOrder model.Order) sql.Result {
+func (s *service) AddOrder(newOrder model.Order) (insertedOrder int) {
 	stmt, _ := s.db.Prepare("INSERT INTO orders (id, first_name, last_name, email, ip_address) VALUES (?, ?, ?, ?, ?)")
 	res, err := stmt.Exec(nil, newOrder.First_name, newOrder.Last_name, newOrder.Email, newOrder.Ip_address)
 	defer stmt.Close()
@@ -125,5 +125,5 @@ func (s *service) AddOrder(newOrder model.Order) sql.Result {
 	}
 	fmt.Printf("Added %v %v at %d\n", newOrder.First_name, newOrder.Last_name, newOrder.Id)
 	fmt.Printf("Result: %s", res)
-	return res
+	return newOrder.Id
 }
