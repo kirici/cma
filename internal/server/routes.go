@@ -1,7 +1,7 @@
 package server
 
 import (
-	"cma/internal/database"
+	"cma/internal/model"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -35,7 +35,7 @@ func (s *Server) healthHandler(c *gin.Context) {
 
 func (s *Server) orderHandler(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	order := database.Order{
+	order := model.Order{
 		Id: id,
 	}
 	c.JSON(http.StatusOK, s.db.AddOrder(order))
