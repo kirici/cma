@@ -8,6 +8,7 @@ build:
 	@echo "Building..."
 	
 	@go build -o main cmd/api/main.go
+	@sqlite3 ${DB_URL} < init.sql
 
 # Run the application
 run:
@@ -21,7 +22,7 @@ test:
 # Clean the binary
 clean:
 	@echo "Cleaning..."
-	@rm -f main ${LOG_FILE}
+	@rm -f main ${LOG_FILE} ${DB_URL}
 
 # Live Reload
 watch:
