@@ -5,8 +5,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
-	"log/slog"
+	"log"      // TODO: use slog
+	"log/slog" // TODO: use logger, slog-gin config from main pkg
 	"os"
 	"strconv"
 	"time"
@@ -123,7 +123,7 @@ func (s *service) AddOrder(newOrder model.Order) (insertedOrder int) {
 	if err != nil {
 		slog.Error("could not execute statement: %s", "err", err)
 	}
-	fmt.Printf("Added %v %v at %d\n", newOrder.First_name, newOrder.Last_name, newOrder.Id)
-	fmt.Printf("Result: %s", res)
+	affectedRows, _ := res.RowsAffected()
+	slog.Info("inserted order", "id", newOrder.Id, "affected rows", affectedRows)
 	return newOrder.Id
 }
