@@ -1,4 +1,9 @@
-set dotenv-required
+set dotenv-required := true
+
+alias c := clean
+alias b := build
+alias r := run
+alias t := test-all
 
 # clean binary, log file, db file
 clean:
